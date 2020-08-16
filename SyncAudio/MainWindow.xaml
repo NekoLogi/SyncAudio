@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncAudio"
         mc:Ignorable="d"
-        Title="SyncAudio" Height="251.663" Width="411.747" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="SyncAudio" Height="299.898" Width="411.747" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="Window_KeyDown" >
     <Grid>
-        <TextBox x:Name="Textbox1" HorizontalAlignment="Left" Height="156" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375"/>
-        <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="10,171,0,0" VerticalAlignment="Top" Width="145" Height="35" Click="Start_Click"/>
-        <Button x:Name="Next" Content="Next Track" HorizontalAlignment="Left" Margin="240,171,0,0" VerticalAlignment="Top" Width="145" Height="35" Click="Next_Click"/>
+        <TextBox x:Name="Textbox1" HorizontalAlignment="Left" Height="185" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375" IsEnabled="False"/>
+        <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="10,213,0,0" VerticalAlignment="Top" Width="145" Height="35" Click="Start_Click"/>
+        <Button x:Name="Next" Content="Next Track" HorizontalAlignment="Left" Margin="240,213,0,0" VerticalAlignment="Top" Width="145" Height="35" Click="Next_Click"/>
     </Grid>
 </Window>
+    
