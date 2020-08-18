@@ -1,0 +1,15 @@
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\bin\Release\SyncAudio.exe.config
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\bin\Release\SyncAudio.exe
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\bin\Release\SyncAudio.pdb
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio.csprojAssemblyReference.cache
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\MainWindow.g.cs
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\App.g.cs
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio_MarkupCompile.cache
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio_MarkupCompile.lref
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\MainWindow.baml
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio.g.resources
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio.Properties.Resources.resources
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio.csproj.GenerateResource.cache
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio.csproj.CoreCompileInputs.cache
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio.exe
+C:\Users\Michael\Documents\GitHub\SyncAudio\SyncAudio\obj\Release\SyncAudio.pdb

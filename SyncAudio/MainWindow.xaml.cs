@@ -37,7 +37,13 @@ namespace SyncAudio
         {
             InitializeComponent();
             FindSongs();
-            player.Open(new Uri(path + songList[index]));
+            try {
+                player.Open(new Uri(path + songList[index]));
+
+            } catch (Exception e) {
+
+                MessageBox.Show("Can't find 'Songs' Folder.");
+            }
             slider.Value = 1;
             player.Volume = slider.Value;
             volumeName.Content = CalculateVolume().ToString() + "%";
