@@ -5,11 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncAudio"
         mc:Ignorable="d"
-        Title="SyncAudio" Height="299.898" Width="411.747" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="Window_KeyDown" >
+        Title="SyncAudio" Height="331.731" Width="411.08" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="Window_KeyDown_1" >
     <Grid>
-        <TextBox x:Name="Textbox1" HorizontalAlignment="Left" Height="185" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375" IsEnabled="False"/>
-        <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="10,213,0,0" VerticalAlignment="Top" Width="145" Height="35" Click="Start_Click"/>
-        <Button x:Name="Next" Content="Next Track" HorizontalAlignment="Left" Margin="240,213,0,0" VerticalAlignment="Top" Width="145" Height="35" Click="Next_Click"/>
+        <Menu Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="405">
+            <MenuItem Header="_Info" Height="20" Click="MenuItem_Click"/>
+        </Menu>
+        <TextBox x:Name="Textbox1" HorizontalAlignment="Left" Height="185" Margin="10,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375"/>
+        <Button x:Name="Start" Content="Start" Margin="10,227,0,0" VerticalAlignment="Top" Height="26" Click="Start_Click" HorizontalAlignment="Left" Width="65"/>
+        <Button x:Name="Next" Content="Next Track" Margin="307,227,0,0" VerticalAlignment="Top" Height="26" Click="Next_Click" HorizontalAlignment="Left" Width="78"/>
+        <Label Content="Volume" HorizontalAlignment="Left" Margin="95,219,0,0" VerticalAlignment="Top" Width="52"/>
+        <Slider x:Name="slider" HorizontalAlignment="Left" Margin="80,231,0,0" VerticalAlignment="Top" Height="22" Width="80" SmallChange="0.05" Maximum="1" ValueChanged="slider_ValueChanged" LargeChange="0" Cursor="Arrow" RenderTransformOrigin="0.512,0.225"/>
+        <Button x:Name="volumeName" Content="Mute" HorizontalAlignment="Left" Margin="165,230,0,0" VerticalAlignment="Top" Width="48" Click="volumeName_Click"/>
+        <Button x:Name="Prev" Content="Prev. Track" Margin="224,227,0,0" VerticalAlignment="Top" Height="26" HorizontalAlignment="Left" Width="78" Click="Prev_Click"/>
+        <Button x:Name="Pause" Content="Pause" Margin="10,258,0,0" VerticalAlignment="Top" Height="26" HorizontalAlignment="Left" Width="65" Click="Pause_Click"/>
+        <Label Content="Track Mode:" HorizontalAlignment="Left" Margin="259,267,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label x:Name="trackState" Content="Off" HorizontalAlignment="Left" Margin="325,267,0,0" VerticalAlignment="Top" Width="41"/>
     </Grid>
 </Window>
     
