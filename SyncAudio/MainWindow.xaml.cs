@@ -203,13 +203,11 @@ namespace SyncAudio
         {
             if (songPaused == false) {
                 songPaused = true;
-                songPlaying = true;
                 Pause.Content = "Play";
                 player.Pause();
 
             } else {
                 songPaused = false;
-                songPlaying = false;
                 Pause.Content = "Pause";
                 player.Play();
             }
