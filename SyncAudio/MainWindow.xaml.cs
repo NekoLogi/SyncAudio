@@ -1,34 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SyncAudio
 {
     public partial class MainWindow : Window
     {
+        // Songs Folder Path's.
         string path = ("file://" + System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Songs/").Replace('\\', '/');
         string localPath = "Songs/";
+
+        // Variables
         int index = 0;
+        int hours, minutes, seconds;
+        bool keyCooldown;
+        double volumeSave = 0.3;
+
         bool songPlaying = false;
         bool songPaused = false;
-        string[] duration;
-        int hours, minutes, seconds;
-        double volumeSave = 0.3;
         bool trackMode = false;
+
+        string[] duration;
 
         List<string> songList = new List<string>();
         MediaPlayer player = new MediaPlayer();
@@ -37,22 +36,27 @@ namespace SyncAudio
         {
             InitializeComponent();
             FindSongs();
+
+            // Set path for tracks, show error if 'Songs' folder doesn't exists.
             try {
                 player.Open(new Uri(path + songList[index]));
-
-            } catch (Exception e) {
-
+            } catch (Exception) {
                 MessageBox.Show("Can't find 'Songs' Folder.");
             }
+
+            // Set UI values to elements.
             slider.Value = 1;
             player.Volume = slider.Value;
             volumeName.Content = CalculateVolume().ToString() + "%";
             Textbox1.Text += "**************************************\n";
+
             ChangeTrackMode();
         }
 
+        // Methods
         public void FindSongs()
-        {
+        { // Search for Songs if 'Songs' folder exists and put the titles in 'songList'.
+
             Textbox1.Clear();
             Textbox1.Text += "**************************************\n";
             Textbox1.Text += "Searching for songs..\n";
@@ -81,7 +85,8 @@ namespace SyncAudio
         }
 
         public void StartStopSong()
-        {
+        { // Start or stop player.
+
             switch (songPlaying) {
                 case false:
                     Start.Content = "Stop";
@@ -100,31 +105,38 @@ namespace SyncAudio
         }
 
         public void Counter()
-        {
+        { // Show runtime of track and status.
+
             try {
                 while (songPlaying == true) {
-                    Textbox1.Dispatcher.Invoke(() => {
-                        duration = player.Position.ToString().Split('.');
-                        if (songPaused == true) {
-                            Textbox1.Text = "Playing: " + songList[index] + "  |  " + duration[0] + "  |  " + "Paused";
-                        } else {
-                            Textbox1.Text = "Playing: " + songList[index] + "  |  " + duration[0];
-                        }
-                    });
+                    switch (songPlaying) {
+                        case true:
+                            Dispatcher.Invoke(() => {
+                                duration = player.Position.ToString().Split('.');
+                                switch (songPaused) {
+                                    case true:
+                                        Textbox1.Text = "Playing: " + songList[index] + "  |  " + duration[0] + "  |  " + "Paused";
+                                        break;
+                                    case false:
+                                        Textbox1.Text = "Playing: " + songList[index] + "  |  " + duration[0];
+                                        break;
+                                }
+                            });
+                            break;
+                    }
                     Thread.Sleep(200);
                 }
             } catch (Exception e) {
-                Textbox1.Dispatcher.Invoke(() => {
+                Dispatcher.Invoke(() => {
                     Textbox1.Text = e.ToString();
-                });
-                player.Dispatcher.Invoke(() => {
                     player.Stop();
                 });
             }
         }
 
         public void CalculateTime()
-        {
+        { // Set starttime for the next track
+
             if (trackMode == true) {
                 string[] parse = player.Position.TotalSeconds.ToString().Split(',');
                 int.TryParse(parse[0], out seconds);
@@ -138,7 +150,8 @@ namespace SyncAudio
         }
 
         public void ChangeTrackMode()
-        {
+        { // Change track mode
+
             if (trackMode == true) {
                 trackState.Content = "Off";
                 trackState.Foreground = Brushes.Red;
@@ -151,7 +164,8 @@ namespace SyncAudio
         }
 
         public void NextSong()
-        {
+        { // Go to next track.
+
             CalculateTime();
 
             FindSongs();
@@ -169,11 +183,13 @@ namespace SyncAudio
             songPaused = false;
             Start.Content = "Stop";
             player.Play();
+
             Task.Run(() => Counter());
         }
 
         public void PrevSong()
-        {
+        { // Go to previous track.
+
             CalculateTime();
 
             FindSongs();
@@ -195,12 +211,14 @@ namespace SyncAudio
         }
 
         public int CalculateVolume()
-        {
+        { // Calculate and Convert volume of slider and return percentage value.
+
             return Convert.ToInt32(slider.Value / 1 * 100);
         }
 
         public void PauseSong()
-        {
+        { // Pause or play player.
+
             if (songPaused == false) {
                 songPaused = true;
                 Pause.Content = "Play";
@@ -213,6 +231,19 @@ namespace SyncAudio
             }
         }
 
+        public void Cooldown()
+        { // Cooldown time for shortcuts.
+            Task.Run(() => {
+                keyCooldown = true;
+                for (int i = 0; i < 2; i++) {
+                    Thread.Sleep(1000);
+                }
+                keyCooldown = false;
+            });
+        }
+
+
+        // UI Elements
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             StartStopSong();
@@ -243,20 +274,57 @@ namespace SyncAudio
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
             PrevSong();
+
+            // Skip track cooldown
+            Task.Run(() => {
+                Dispatcher.Invoke(() => {
+                    Prev.IsEnabled = false;
+                });
+                for (int i = 2; i > 0; i--) {
+                    Dispatcher.Invoke(() => {
+                        Prev.Content = i.ToString();
+                    });
+                    Thread.Sleep(1000);
+                }
+                Dispatcher.Invoke(() => {
+                    Prev.Content = "Next Track";
+                    Prev.IsEnabled = true;
+                });
+            });
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Shortcuts:\n\nEnter = Play/Stop Player\nSpace = Pause Track\n\nArrow Right = next Track\nArrow Left = Previous Track\n\nArrow Up = Volume Up\nArrow Down = Volume Down\n\nM = Change Track Mode\nOff = New Track begins from beginning\nOn = New Track begins where the Previous ended");
+        { // Show Shortcuts.
+
+            MessageBox.Show("Shortcuts:\n\nEnter = Play/Stop Player\nSpace = Pause Track\n\nP = next Track\nO = Previous Track\n\nArrow Up = Volume Up\nArrow Down = Volume Down\n\nM = Change Track Mode\nOff = New Track begins from beginning\nOn = New Track begins where the Previous ended");
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
             NextSong();
+
+            // Skip track cooldown.
+            Task.Run(() => {
+                Dispatcher.Invoke(() => {
+                    Next.IsEnabled = false;
+                });
+                for (int i = 2; i > 0; i--) {
+                    Dispatcher.Invoke(() => {
+                        Next.Content = i.ToString();
+                    });
+                    Thread.Sleep(1000);
+                }
+                Dispatcher.Invoke(() => {
+                    Next.Content = "Next Track";
+                    Next.IsEnabled = true;
+                });
+            });
+
         }
 
         private void Window_KeyDown_1(object sender, KeyEventArgs e)
-        {
+        { // Shortcuts when window is focused.
+
             if (e.Key == Key.Enter) {
                 StartStopSong();
             } else if (e.Key == Key.Space) {
@@ -268,11 +336,14 @@ namespace SyncAudio
             } else if (e.Key == Key.Down && player.Volume != 0) {
                 player.Volume -= 0.05;
             }
-
-            if (e.Key == Key.Right) {
-                NextSong();
-            } else if (e.Key == Key.Left) {
-                PrevSong();
+            if (keyCooldown == false) {
+                if (e.Key == Key.P) {
+                    NextSong();
+                    Cooldown();
+                } else if (e.Key == Key.O) {
+                    PrevSong();
+                    Cooldown();
+                }
             }
 
             if (e.Key == Key.M) {

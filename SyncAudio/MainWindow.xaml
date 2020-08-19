@@ -10,7 +10,7 @@
         <Menu Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="405">
             <MenuItem Header="_Info" Height="20" Click="MenuItem_Click"/>
         </Menu>
-        <TextBox x:Name="Textbox1" HorizontalAlignment="Left" Height="185" Margin="10,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375"/>
+        <TextBox x:Name="Textbox1" HorizontalAlignment="Left" Height="185" Margin="10,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375" IsEnabled="False"/>
         <Button x:Name="Start" Content="Start" Margin="10,227,0,0" VerticalAlignment="Top" Height="26" Click="Start_Click" HorizontalAlignment="Left" Width="65"/>
         <Button x:Name="Next" Content="Next Track" Margin="307,227,0,0" VerticalAlignment="Top" Height="26" Click="Next_Click" HorizontalAlignment="Left" Width="78"/>
         <Label Content="Volume" HorizontalAlignment="Left" Margin="95,219,0,0" VerticalAlignment="Top" Width="52"/>
