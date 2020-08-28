@@ -24,14 +24,16 @@ namespace SyncAudio
 
         // Variables
         int index = 0;
-        int hours, minutes, seconds, timeSeconds;
+        int timeSeconds;
         bool keyCooldown;
+        bool isKeyPressed = false;
         double volumeSave = 0.3;
 
         bool songPlaying = false;
         bool songPaused = false;
         bool trackMode = false;
-
+        bool threadIsRunning = false;
+        bool isThreadRunning = true;
 
         List<string> songList = new List<string>();
         MediaPlayer player = new MediaPlayer();
@@ -55,6 +57,15 @@ namespace SyncAudio
             Textbox1.Text += "**************************************\n";
 
             ChangeTrackMode();
+
+            // Create thread for shortcuts.
+            if (threadIsRunning == false) {
+                threadIsRunning = true;
+
+                Thread thread = new Thread(KeyListener);
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+            }
         }
 
         // Methods
@@ -274,6 +285,41 @@ namespace SyncAudio
             });
         }
 
+        public void KeyListener()
+        {   // Shortcuts for the player.
+
+            while (isThreadRunning) {
+
+                Thread.Sleep(50);
+                if (Keyboard.IsKeyDown(Key.M) && !isKeyPressed) {
+                    Dispatcher.Invoke(ChangeTrackMode);
+                    isKeyPressed = true;
+                } else if (Keyboard.IsKeyDown(Key.Enter) && !isKeyPressed) {
+                    Dispatcher.Invoke(StartStopSong);
+                    isKeyPressed = true;
+                } else if (Keyboard.IsKeyDown(Key.Up) && !isKeyPressed && Dispatcher.Invoke(() => player.Volume != 1.00)) {
+                    this.Dispatcher.Invoke(() => slider.Value = slider.Value + 0.05);
+                    isKeyPressed = true;
+                    
+                } else if (Keyboard.IsKeyDown(Key.Down) && !isKeyPressed && Dispatcher.Invoke(() => player.Volume != 0))  {
+                    this.Dispatcher.Invoke(() => slider.Value = slider.Value - 0.05);
+                    isKeyPressed = true;
+                } else if (Keyboard.IsKeyDown(Key.O) && !isKeyPressed && !keyCooldown) {
+                     Dispatcher.Invoke(PrevSong);
+                    Dispatcher.Invoke(Cooldown);
+                    isKeyPressed = true;
+                } else if (Keyboard.IsKeyDown(Key.P) && !isKeyPressed && !keyCooldown) {
+                    Dispatcher.Invoke(NextSong);
+                    Dispatcher.Invoke(Cooldown);
+                    isKeyPressed = true;
+                } else if (Keyboard.IsKeyDown(Key.Space) && !isKeyPressed) {
+                    Dispatcher.Invoke(PauseSong);
+                    isKeyPressed = true;
+                } else if (!Keyboard.IsKeyDown(Key.Enter) && !Keyboard.IsKeyDown(Key.M) && !Keyboard.IsKeyDown(Key.Up) && !Keyboard.IsKeyDown(Key.Down) && !Keyboard.IsKeyDown(Key.O) && !Keyboard.IsKeyDown(Key.P) && !Keyboard.IsKeyDown(Key.Space)) {
+                    isKeyPressed = false;
+                }
+            }
+        }
 
         // UI Elements
         private void Start_Click(object sender, RoutedEventArgs e)
@@ -310,6 +356,11 @@ namespace SyncAudio
             Cooldown();
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            isThreadRunning = false;
+        }
+
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         { // Show Shortcuts.
 
@@ -320,35 +371,6 @@ namespace SyncAudio
         {
             NextSong();
             Cooldown();
-        }
-
-        private void Window_KeyDown_1(object sender, KeyEventArgs e)
-        { // Shortcuts when window is focused.
-
-            if (e.Key == Key.Enter) {
-                StartStopSong();
-            } else if (e.Key == Key.Space) {
-                PauseSong();
-            }
-
-            if (e.Key == Key.Up && player.Volume != 1.00) {
-                player.Volume += 0.05;
-            } else if (e.Key == Key.Down && player.Volume != 0) {
-                player.Volume -= 0.05;
-            }
-            if (keyCooldown == false) {
-                if (e.Key == Key.P) {
-                    NextSong();
-                    Cooldown();
-                } else if (e.Key == Key.O) {
-                    PrevSong();
-                    Cooldown();
-                }
-            }
-
-            if (e.Key == Key.M) {
-                ChangeTrackMode();
-            }
         }
     }
 }

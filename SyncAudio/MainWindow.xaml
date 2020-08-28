@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncAudio"
         mc:Ignorable="d"
-        Title="SyncAudio" Height="331.731" Width="411.08" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="Window_KeyDown_1" >
+        Title="SyncAudio" Height="331.731" Width="411.08" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Closed="Window_Closed" >
     <Grid>
         <Menu Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="405">
             <MenuItem Header="_Info" Height="20" Click="MenuItem_Click"/>
