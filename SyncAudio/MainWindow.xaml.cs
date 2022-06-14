@@ -23,6 +23,7 @@ namespace SyncAudio
         string[] duration;
 
         // Variables
+        int hours, minutes, seconds;
         int index = 0;
         int timeSeconds;
         bool keyCooldown;
